@@ -1,0 +1,55 @@
+<g:Game xmlns:g="pyf2.game" xmlns:p="pyf2.items.props" xmlns:i="pyf2.items">
+	<meta>
+		<title>The Cloak of Darkness</title>
+		<version></version>
+		<description>Simple demo game</description>
+		<introduction>Hurrying through the rainswept November night, you're glad to see the bright lights of the Opera House. It's surprising that there aren't more people about but, hey, what do you expect in a cheap demo game...?</introduction>
+	</meta>
+	
+	<i:Item name="Foyer of the Opera House,foyer">
+		<p:Desc>You are standing in a spacious hall, splendidly decorated in red and gold, with glittering chandeliers overhead. The entrance from the street is to the north, and there are doorways south and west.</p:Desc>
+		
+		<p:Traversable dir="west" to="Cloakroom" />
+		<p:Traversable dir="south" to="Foyer Bar" />
+		<p:Room />
+
+		<p:Handler input="north">
+			You've only just arrived, and besides, the weather outside seems to be getting worse.
+		</p:Handler>
+			
+		<p:Handler input="drop cloak">This isn't the best place to leave a smart cloak lying around.</p:Handler>
+
+		<i:Actor name="yourself">
+			<p:Desc>As handsome as ever.</p:Desc>
+
+			<i:Item name="cloak,cape">
+				<p:Desc>A handsome cloak, of velvet trimmed with satin, and slightly spattered with raindrops. Its blackness is so deep that it almost seems to suck light from the room.</p:Desc>
+				<p:Wearable worn="{{True}}" />
+				<p:Portable droppable="{{True}}" />
+			</i:Item>
+		</i:Actor>
+	</i:Item>
+	
+	<i:Item name="Cloakroom">
+		<p:Desc>The walls of this small room were clearly once lined with hooks, though now only one remains. The exit is a door to the east.</p:Desc>
+		<p:Traversable dir="east" to="Foyer of the Opera House" />
+		<p:Room />
+
+		<i:Item name="hook,peg" adjective="small,brass">
+			<p:Desc>It's just a small brass hook{{ input.item.has('cloak') and ' with a cloak hanging on it' or '' }}.</p:Desc>
+			<p:Surface hanger="{{True}}" />
+		</i:Item>
+	</i:Item>
+	
+	<i:Item name="Foyer Bar,bar">
+		<p:Desc>{{game.find('Foyer Bar').props.Dark.lit and "The bar, much rougher than you'd have guessed after the opulence of the foyer to the north, is completely empty. There seems to be some sort of message scrawled in the sawdust on the floor." or "It's dark in here!"}}</p:Desc>
+		<p:Traversable dir="north" to="Foyer of the Opera House" />
+		<p:Room />
+		
+		<p:Dark lit="{{ not game.find('Foyer Bar').has('cloak') }}" />
+
+		<Message name="message,sawdust,floor,dust" adjective="scrawled" />
+		
+	</i:Item>
+
+</g:Game>
