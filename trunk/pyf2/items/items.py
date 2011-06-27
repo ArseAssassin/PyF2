@@ -110,15 +110,27 @@ class Item(ItemBase):
 
 class Actor(Item):
 	msg_default = Variable("msg_default", "Come again?")
+	msg_unknownNoun = Variable("msg_unknownNoun", "You see nothing like that here.")
+	msg_unknownVerb = Variable("msg_unknownVerb", "You don't know how to \"{{input.unknown[0].name}}\" things.")
 	
 	def handle(self, input, output):
 		if input == ("inventory",):
-			output.write("You're carrying:", False)
-			for item in self.inventory:
-				output.write(item.indefinite)
-				
-			output.close()
+			self.writeInventory(output)
+		
+		if input == ("*verb", "*unknown"):
+			output.write(self.msg_unknownNoun)
+			
+		if input == ("*unknown", "*noun"):
+			output.write(self.msg_unknownVerb)
 		
 		output.write(self.msg_default)
+		
+	def writeInventory(self, output):
+		output.write("You're carrying:", -2)
+		for item in self.inventory:
+			output.write(item.indefinite, -1)
+			
+		output.close()
+		
 		
 		

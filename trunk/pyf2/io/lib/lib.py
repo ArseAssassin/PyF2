@@ -294,6 +294,10 @@ class Sentence(object):
 		return '<Sentence "%s">' % (' '.join([x.name for x in self.words]))
 		
 	@property
+	def unknown(self):
+		return filter(lambda x: x == "*unknown", self)
+				
+	@property
 	def nouns(self):
 		return filter(lambda x: x == "*noun", self)
 				

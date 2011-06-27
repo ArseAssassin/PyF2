@@ -1,12 +1,26 @@
 from io.output import Output
+from items.events import game_events
 
 class Interface(object):
 	def __init__(self):
 		self.logging = True
 		self.log = []
+		self.game = None
 		
 	def loadGame(self, game):
+		if self.game:
+			self.game.removeEventListener(game_events.GAME_WON, self.onVictory)
+			self.game.removeEventListener(game_events.GAME_LOST, self.onDefeat)			
+		
 		self.game = game
+		self.game.addEventListener(game_events.GAME_WON, self.onVictory)
+		self.game.addEventListener(game_events.GAME_LOST, self.onDefeat)
+		
+	def onVictory(self, event):
+		raise Exception("Unimplemented")		
+
+	def onDefeat(self, event):
+		raise Exception("Unimplemented")		
 		
 	def startGame(self):
 		raise Exception("Unimplemented")		
@@ -45,7 +59,7 @@ class Basic(Interface):
 		output = Output()
 		self.game.writeIntro(output)
 		self.printOutput(output)
-		while True:
+		while self.game.done == False:
 			self.promptInput()
 	
 	def printOutput(self, output):
@@ -54,4 +68,10 @@ class Basic(Interface):
 	def promptInput(self):
 		a = raw_input(self.prompt)
 		self.input(a)
+
+	def onVictory(self, event):
+		self.game.done = True
+
+	def onDefeat(self, event):
+		self.game.done = True
 

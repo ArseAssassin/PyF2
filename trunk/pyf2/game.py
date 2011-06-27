@@ -18,6 +18,8 @@ class Game(ItemBase):
 		self.inventory = []
 		self._states = []
 		
+		self.done = False
+		
 		self.title = "undefined"
 		self.version = "undefined"
 		self.description = "undefined"

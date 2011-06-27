@@ -132,7 +132,7 @@ class Wearable(Property):
 			
 	def inlineStrip(self, input, output):
 		self.worn = False
-		output.write(self.msg_first, False)
+		output.write(self.msg_first, -1)
 
 	def handle(self, input, output):
 		if input == ("wear", "*self"):
@@ -174,7 +174,7 @@ class Portable(Property):
 	def handle(self, input, output):
 		if self.isPortable and input == ("take", "*self"):
 			if input.actor == input.item.owner:
-				output.write(self.msg_firstDrop, False)
+				output.write(self.msg_firstDrop, -1)
 				input.item.move(input.actor.owner)
 
 			input.item.move(input.actor)
@@ -183,7 +183,7 @@ class Portable(Property):
 			self.moved = True
 		elif self.isDroppable and input == ("drop", "*self"):
 			if input.actor != input.item.owner:
-				output.write(self.msg_firstTake, False)
+				output.write(self.msg_firstTake, -1)
 				input.item.move(input.actor)
 				
 			input.item.move(input.actor.owner)
@@ -202,29 +202,41 @@ class Handler(Property):
 			
 			
 class Traversable(Property):
-	to = Variable("to")
-	dir = Variable("dir")
+	msg_noExit = Variable("msg_noExt", "There is no exit leading that way.")
+	
+	def __init__(self, *args, **kwargs):
+		Property.__init__(self, *args, **kwargs)
+		self.shouldTraverse = False
 	
 	def handle(self, input, output):
-		if input == (self.dir,):
-			room = self.game.find(self.to)
-			input.actor.move(room)
+		for node in self.xmlnode.childNodes:
+			if node.nodeType == 1: # node is element node
+				if input == (node.localName,):
+					room = self.game.find(node.firstChild.nodeValue)
+					input.actor.move(room)
 			
-			output.write(room.name, False)
-			output.write(room.props.Describable.description)
+					room.props.Room.writeDescription(output)
+					
+		if input == ("*direction",):
+			output.write(self.msg_noExit)
 		
 		
 class Room(Property):
+	description = DataVariable("No description.")
+
 	def handle(self, input, output):
 		if input == ("examine",):
-			output.write(self.item.name, False)
-			output.write(self.item.props.Describable.description, False)
+			self.writeDescription(output)
 			
-			moved = filter(lambda x: x.props.Portable and x.props.Portable.moved, self.item.inventory)
-			if moved:
-				output.write("You can also see %s here." % ', '.join([item.noun.indefinite for item in moved]), False)
-				
-			output.close()
+	def writeDescription(self, output):
+		output.write(self.item.name, -1)
+		output.write(self.description, -1)
+		
+		moved = filter(lambda x: x.props.Portable and x.props.Portable.moved, self.item.inventory)
+		if moved:
+			output.write("You can also see %s here." % ', '.join([item.noun.indefinite for item in moved]), -1)
+			
+		output.close()
 			
 			
 		

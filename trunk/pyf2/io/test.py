@@ -76,7 +76,7 @@ class test_Output(unittest.TestCase):
 		self.plainOutput = Output()
 		
 	def test_output(self):
-		self.output.write("hello", False)
+		self.output.write("hello", -1)
 		self.assertRaises(
 			OutputClosed, lambda: self.output.write("world")
 		)
@@ -85,6 +85,15 @@ class test_Output(unittest.TestCase):
 		self.assertRaises(
 			OutputClosed, lambda: self.plainOutput.write("world")
 		)
+		
+		self.output.clean()
+		
+		self.output.write("hello", -1)
+		self.output.write("world", -1)
+		try:
+			self.output.close()
+		except OutputClosed, e:
+			self.assertEquals(self.output.text, "hello\nworld")
 		
 		
 if __name__ == "__main__":

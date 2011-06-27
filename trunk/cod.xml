@@ -7,12 +7,15 @@
 	</meta>
 	
 	<i:Item name="Foyer of the Opera House,foyer">
-		<p:Desc>You are standing in a spacious hall, splendidly decorated in red and gold, with glittering chandeliers overhead. The entrance from the street is to the north, and there are doorways south and west.</p:Desc>
-		
-		<p:Traversable dir="west" to="Cloakroom" />
-		<p:Traversable dir="south" to="Foyer Bar" />
-		<p:Room />
+		<p:Room>
+			You are standing in a spacious hall, splendidly decorated in red and gold, with glittering chandeliers overhead. The entrance from the street is to the north, and there are doorways south and west.
+		</p:Room>
 
+		<p:Traversable>
+			<west>Cloakroom</west>
+			<south>Foyer Bar</south>
+		</p:Traversable>
+		
 		<p:Handler input="north">
 			You've only just arrived, and besides, the weather outside seems to be getting worse.
 		</p:Handler>
@@ -31,9 +34,11 @@
 	</i:Item>
 	
 	<i:Item name="Cloakroom">
-		<p:Desc>The walls of this small room were clearly once lined with hooks, though now only one remains. The exit is a door to the east.</p:Desc>
-		<p:Traversable dir="east" to="Foyer of the Opera House" />
-		<p:Room />
+		<p:Room>The walls of this small room were clearly once lined with hooks, though now only one remains. The exit is a door to the east.</p:Room>
+
+		<p:Traversable>
+			<east>Foyer of the Opera House</east>
+		</p:Traversable>
 
 		<i:Item name="hook,peg" adjective="small,brass">
 			<p:Desc>It's just a small brass hook{{ input.item.has('cloak') and ' with a cloak hanging on it' or '' }}.</p:Desc>
@@ -42,12 +47,12 @@
 	</i:Item>
 	
 	<i:Item name="Foyer Bar,bar">
-		<p:Desc>{{game.find('Foyer Bar').props.Dark.lit and "The bar, much rougher than you'd have guessed after the opulence of the foyer to the north, is completely empty. There seems to be some sort of message scrawled in the sawdust on the floor." or "It's dark in here!"}}</p:Desc>
-		<p:Traversable dir="north" to="Foyer of the Opera House" />
-		<p:Room />
-		
-		<p:Dark lit="{{ not game.find('Foyer Bar').has('cloak') }}" />
+		<p:Room>{{not actor.has('cloak') and "The bar, much rougher than you'd have guessed after the opulence of the foyer to the north, is completely empty. There seems to be some sort of message scrawled in the sawdust on the floor." or "It's dark in here!"}}</p:Room>
 
+		<p:Traversable>
+			<north>Foyer of the Opera House</north>
+		</p:Traversable>
+		
 		<Message name="message,sawdust,floor,dust" adjective="scrawled" />
 		
 	</i:Item>
