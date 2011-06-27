@@ -1,5 +1,5 @@
-from items.xmlinit import nodes
-from items import Item, Actor
+from world.xmlinit import nodes
+from world import Item, Actor
 from states import Controlled
 
 def buildGameFromXML(doc, main):

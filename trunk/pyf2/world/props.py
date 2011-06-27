@@ -119,6 +119,8 @@ class Wearable(Property):
 
 	msg_strip = Variable("msg_strip", "You finish taking off {{input.noun.definite}}.")
 	msg_alreadyStripped= Variable("msg_stripped", "You're not wearing {{input.noun.definite}}.")
+
+	msg_notCarrying = Variable("msg_notCarrying", "You're not carrying {{input.noun.definite}}.")
 	
 	worn = GameVariable("worn", False)
 
@@ -136,6 +138,9 @@ class Wearable(Property):
 
 	def handle(self, input, output):
 		if input == ("wear", "*self"):
+			if self.item.owner != input.actor:
+				output.write(self.msg_notCarrying)
+				
 			if self.worn:
 				output.write(self.msg_alreadyWorn)
 			else:
@@ -159,10 +164,10 @@ class Hot(Property):
 			output.write(self.msg_tooHot)
 				
 
-class Portable(Property):
-	msg_firstTake = Variable("msg_firstTake", "(first taking {{input.noun.definite}})")
-	msg_firstDrop = Variable("msg_firstDrop", "(first dropping {{input.noun.definite}})")
+TAKE = GameEvent("take")
+DROP = GameEvent("drop")
 
+class Portable(Property):
 	msg_dropped = Variable("msg_dropped", "You drop {{input.noun.definite}} on the ground.")
 	isDroppable = Variable("isDroppable", True)
 	
@@ -173,20 +178,16 @@ class Portable(Property):
 	
 	def handle(self, input, output):
 		if self.isPortable and input == ("take", "*self"):
-			if input.actor == input.item.owner:
-				output.write(self.msg_firstDrop, -1)
-				input.item.move(input.actor.owner)
-
+			self.dispatchEvent(TAKE(done=False))
 			input.item.move(input.actor)
+			self.dispatchEvent(TAKE(done=True))
 			output.write(self.msg_taken)
 			
 			self.moved = True
 		elif self.isDroppable and input == ("drop", "*self"):
-			if input.actor != input.item.owner:
-				output.write(self.msg_firstTake, -1)
-				input.item.move(input.actor)
-				
+			self.dispatchEvent(DROP(done=False))
 			input.item.move(input.actor.owner)
+			self.dispatchEvent(DROP(done=True))
 			output.write(self.msg_dropped)
 			
 			self.moved = True
@@ -225,7 +226,7 @@ class Room(Property):
 	description = DataVariable("No description.")
 
 	def handle(self, input, output):
-		if input == ("examine",):
+		if input == ("examine",) or input == "":
 			self.writeDescription(output)
 			
 	def writeDescription(self, output):

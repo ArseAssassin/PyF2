@@ -1,7 +1,7 @@
 from io.context import Context
 from io.output import Output, OutputClosed
-from items.events.events import EventDispatcher, Event
-from items.events import game_events
+from world.events.events import EventDispatcher, Event
+from world.events import game_events
 
 class StateEvent(Event):
 	def __init__(self, type, state=None, *args, **kwargs):

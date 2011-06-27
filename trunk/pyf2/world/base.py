@@ -50,17 +50,17 @@ class PropList(list):
 class VarBase(object):
 	def __init__(self):
 		self.overridden = False
+		self.values = {}
 		
 	def __get__(self, instance, type):
 		s = self.getDefault(instance)
-		if s and not self.overridden:
+		if instance not in self.values:
 			return s
 		else:
-			return self.value
+			return self.values[instance]
 			
 	def __set__(self, instance, value):
-		self.overridden = True
-		self.value = value
+		self.values[instance] = value
 		
 	def getDefault(self, instance):
 		raise Exception("unimplemented")
@@ -69,11 +69,15 @@ class VarBase(object):
 class Variable(VarBase):
 	def __init__(self, id, initial=None):
 		VarBase.__init__(self)
-		self.value = initial
+		self.initial = initial
 		self.id = id
 		
 	def getDefault(self, instance):
-		return instance.getXMLAttribute(self.id)
+		s = instance.getXMLAttribute(self.id)
+		if s:
+			return s
+		else:
+			return self.initial
 
 
 class DataVariable(VarBase):

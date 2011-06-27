@@ -1,10 +1,10 @@
 from errors import StateError, GameError
 import states
 
-from items.xmlinit import nodes
-from items.base import ItemBase
+from world.xmlinit import nodes
+from world.base import ItemBase
 
-from items.events.events import EventDispatcher
+from world.events.events import EventDispatcher
 import io.lib.defaults
 from io.lib import lib
 from io.output import Output

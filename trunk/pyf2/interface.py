@@ -1,5 +1,5 @@
 from io.output import Output
-from items.events import game_events
+from world.events import game_events
 
 class Interface(object):
 	def __init__(self):

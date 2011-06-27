@@ -2,8 +2,8 @@ from mock import Mock
 
 from xml.dom import minidom
 
-import items.items
-import items.scope
+import world.items
+import world.scope
 import game
 import states
 import init
@@ -12,7 +12,7 @@ from errors import StateError
 from io.output import OutputClosed
 
 #	import all unit test
-from items.test import *
+from world.test import *
 from io.test import *
 
 import unittest
@@ -31,7 +31,7 @@ def mockActor():
 	actor = Mock()
 	actor._handle = Mock(side_effect = testHandle)
 	
-	scope = Mock(spec=items.scope.Scope)
+	scope = Mock(spec=world.scope.Scope)
 	scope.topDown = lambda: [actor]
 	
 	actor.getScope = lambda: scope
@@ -145,7 +145,7 @@ class test_GameInitiation(unittest.TestCase):
 class test_GameIntegration(unittest.TestCase):
 	def setUp(self):
 		xml = '''
-		<g:Game xmlns:g="game" xmlns:i="items.items" xmlns:p="items.props">
+		<g:Game xmlns:g="game" xmlns:i="world.items" xmlns:p="world.props">
 			<meta>
 				<title>Test game</title>
 				<description>Test description</description>
@@ -243,7 +243,6 @@ class test_GameIntegration(unittest.TestCase):
 		
 		self.assertEqual(self.cg.input("examine").text, "\n".join([self.player.owner.name, self.player.owner.name, "You can also see %s here." % self.cloak.noun.indefinite]))
 
-		self.assertInput("drop cloak", ['(first taking %s)' % self.cloak.noun.definite, 'You drop %s on the ground.' % self.cloak.noun.definite])
 		
 		self.assertInput("put cloak on table", "You place %s on %s." % (self.cloak.definite, self.table.definite))
 		

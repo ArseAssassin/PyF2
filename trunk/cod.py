@@ -3,11 +3,11 @@ import sys
 from xml.dom import minidom
 
 from pyf2 import debug, init
-from pyf2.items import props, items
+from pyf2.world import props, items
 
-from pyf2.items.events import game_events
+from pyf2.world.events import game_events
 
-class Message(items.Item):
+class Message(world.Item):
 	counter = 0
 	
 	def handle(self, input, output):

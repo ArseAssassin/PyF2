@@ -1,4 +1,4 @@
-<g:Game xmlns:g="pyf2.game" xmlns:p="pyf2.items.props" xmlns:i="pyf2.items">
+<g:Game xmlns:g="pyf2.game" xmlns:p="pyf2.world.props" xmlns:i="pyf2.items">
 	<meta>
 		<title>The Cloak of Darkness</title>
 		<version></version>
