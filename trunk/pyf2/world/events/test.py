@@ -76,24 +76,6 @@ class test_Event(unittest.TestCase):
 		self.assertEqual(len(self.d.listeners[Node.TOUCHED.type]), 0)
 
 
-class test_GameEvent(unittest.TestCase):
-	def setUp(self):
-		self.gameEvent = game_events.ACQUIRE(done=True, output="output")
-		self.gameEvent2 = game_events.MoveEvent("type", done=True, output="output")
-		self.moveEvent = game_events.MOVE(done=False, output=None, destination=3)
-		
-	def test_parameters(self):
-		thing = TestEvent()
-		thing = thing(done=False)
-		self.assertEqual(thing.data['done'], False)
 
-		self.assertEqual(self.gameEvent.__class__, game_events.MoveEvent)
-
-		self.assertEqual(self.gameEvent2.done, True)
-		self.assertEqual(self.gameEvent.done, True)
-		self.assertEqual(self.gameEvent.output, "output")
-		
-
-    
 if __name__ == '__main__':
 	unittest.main()

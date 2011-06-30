@@ -134,7 +134,7 @@ class Wearable(Property):
 			
 	def inlineStrip(self, input, output):
 		self.worn = False
-		output.write(self.msg_first, -1)
+		output.write(self.msg_first, 1)
 
 	def handle(self, input, output):
 		if input == ("wear", "*self"):
@@ -178,16 +178,16 @@ class Portable(Property):
 	
 	def handle(self, input, output):
 		if self.isPortable and input == ("take", "*self"):
-			self.dispatchEvent(TAKE(done=False))
+			self.dispatchEvent(TAKE())
 			input.item.move(input.actor)
-			self.dispatchEvent(TAKE(done=True))
+			
 			output.write(self.msg_taken)
 			
 			self.moved = True
 		elif self.isDroppable and input == ("drop", "*self"):
-			self.dispatchEvent(DROP(done=False))
+			self.dispatchEvent(DROP())
 			input.item.move(input.actor.owner)
-			self.dispatchEvent(DROP(done=True))
+			
 			output.write(self.msg_dropped)
 			
 			self.moved = True
@@ -230,12 +230,12 @@ class Room(Property):
 			self.writeDescription(output)
 			
 	def writeDescription(self, output):
-		output.write(self.item.name, -1)
-		output.write(self.description, -1)
+		output.write(self.item.name, 1)
+		output.write(self.description, 1)
 		
 		moved = filter(lambda x: x.props.Portable and x.props.Portable.moved, self.item.inventory)
 		if moved:
-			output.write("You can also see %s here." % ', '.join([item.noun.indefinite for item in moved]), -1)
+			output.write("You can also see %s here." % ', '.join([item.noun.indefinite for item in moved]), 1)
 			
 		output.close()
 			

@@ -2,6 +2,12 @@ from world.xmlinit import nodes
 from world import Item, Actor
 from states import Controlled
 
+from xml.dom import minidom
+
+def parseXML(file):
+	return minidom.parse(file)
+		
+
 def buildGameFromXML(doc, main):
 	context = nodes.Context(
 		default=DefaultContext(main)
@@ -18,9 +24,9 @@ def buildGameFromXML(doc, main):
 			continue
 			
 		if isinstance(item, Item):
-			if isinstance(item, Actor):
-				game.newState(Controlled(item))
 			game.addItem(item)
+			if item.id == "initial_actor":
+				game.newState(Controlled(item))
 			
 	return game
 		

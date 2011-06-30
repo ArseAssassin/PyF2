@@ -20,7 +20,7 @@ import unittest
 
 def testHandle(input, output):
 	if input == "look":
-		output.write("looking", -1)
+		output.write("looking", 1)
 		output.write("away", 0)
 	elif input == "get book":
 		output.write("got it")
@@ -155,7 +155,7 @@ class test_GameIntegration(unittest.TestCase):
 			<i:Item name="room">
 				<p:Room>room1</p:Room>
 
-				<i:Item name="yourself">
+				<i:Item name="yourself" id="initial_actor">
 					<p:Describable>As handsome as ever.</p:Describable>
 					<i:Item name="cloak">
 						<p:Portable droppable="{{True}}" />
@@ -183,11 +183,10 @@ class test_GameIntegration(unittest.TestCase):
 		doc = minidom.parseString(xml)
 
 		self.complexGame = init.buildGameFromXML(doc, None)
-		self.complexGame.newState(states.Controlled(self.complexGame.find("yourself")))
 		
 		self.room1 = self.complexGame.find("room")
 		self.room2 = self.complexGame.find("room2")
-		self.player = self.complexGame.find("yourself")
+		self.player = self.complexGame.find("initial_actor")
 		self.cloak = self.complexGame.find("cloak")
 		self.table = self.complexGame.find("table")
 		
@@ -202,12 +201,12 @@ class test_GameIntegration(unittest.TestCase):
 		return self.complexGame
 			
 	def test_gameStructure(self):
-		self.assertEqual(self.complexGame.find('yourself').owner, self.complexGame.find("room"))
+		self.assertEqual(self.player.owner, self.complexGame.find("room"))
 		self.assertEqual(self.complexGame.find('table').owner, self.complexGame.find("room2"))
 
-		scope = self.complexGame.find('yourself').getScope()
+		scope = self.player.getScope()
 		
-		self.assertTrue(self.complexGame.inventory[0].has('yourself'))
+		self.assertTrue(self.complexGame.inventory[0].has('initial_actor'))
 		
 		self.assertNotEqual(self.complexGame.inventory[1].props.Describable, None)
 		self.assertEqual(self.complexGame.inventory[1].props.Describable.description, "As handsome as ever.")

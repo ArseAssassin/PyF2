@@ -1,14 +1,13 @@
 import events
 
 class GameEvent(events.Event):
-	def __init__(self, type, done=None):
+	def __init__(self, type):
 		events.Event.__init__(self, type)
-		self.done = done
 
 
 class MoveEvent(GameEvent):
-	def __init__(self, type, done=None, destination=None):
-		GameEvent.__init__(self, type=type, done=done)
+	def __init__(self, type, destination=None):
+		GameEvent.__init__(self, type=type)
 		
 		self.destination = destination
 		

@@ -3,9 +3,9 @@ from world.events import game_events
 
 class Interface(object):
 	def __init__(self):
-		self.logging = True
 		self.log = []
 		self.game = None
+		self.gameFinished = False
 		
 	def loadGame(self, game):
 		if self.game:
@@ -23,7 +23,7 @@ class Interface(object):
 		raise Exception("Unimplemented")		
 		
 	def startGame(self):
-		raise Exception("Unimplemented")		
+		raise Exception("Unimplemented")
 		
 	def saveGameState(self):
 		raise Exception("Unimplemented")
@@ -37,8 +37,7 @@ class Interface(object):
 		input = self.game.parse(s)
 		output = self.game.handle(input)
 		
-		if self.logging:
-			self.log.append(("%s %s" % (prompt, s), output.text))
+		self.log.append(("%s %s" % (prompt, s), output.text))
 		
 		self.printOutput(output)
 		
@@ -59,8 +58,13 @@ class Basic(Interface):
 		output = Output()
 		self.game.writeIntro(output)
 		self.printOutput(output)
-		while self.game.done == False:
-			self.promptInput()
+		try:
+			while not self.gameFinished:
+				self.promptInput()
+		except KeyboardInterrupt, e:
+			pass
+		except EOFError, e:
+			pass
 	
 	def printOutput(self, output):
 		print output.text
@@ -70,8 +74,8 @@ class Basic(Interface):
 		self.input(a)
 
 	def onVictory(self, event):
-		self.game.done = True
+		self.gameFinished = True
 
 	def onDefeat(self, event):
-		self.game.done = True
+		self.gameFinished = True
 

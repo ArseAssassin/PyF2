@@ -50,11 +50,12 @@ class Controlled(State):
 			
 			for x in input.items:
 				if x in scope:
-					x.owner.dispatchEvent(game_events.CHILD_HANDLE(done=False))
+					x.owner.dispatchEvent(game_events.CHILD_HANDLE())
 					self.handleWith(x, input, output)
-					x.owner.dispatchEvent(game_events.CHILD_HANDLE(done=True))
 
 			self.handleWith(self.actor, input, output)
+
+			self.actor.handleError(input, output)
 			
 		except OutputClosed, e:
 			pass

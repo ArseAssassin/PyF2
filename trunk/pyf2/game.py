@@ -2,6 +2,7 @@ from errors import StateError, GameError
 import states
 
 from world.xmlinit import nodes
+from world.events import game_events
 from world.base import ItemBase
 
 from world.events.events import EventDispatcher
@@ -40,7 +41,6 @@ class Game(ItemBase):
 	def addItem(self, item):
 		if item in self.inventory:
 			raise GameError("%s already in game inventory" % str(item))
-		self.inventory.append(item)
 		
 		if item.xmlnode.hasAttribute("name"):
 			names = item.xmlnode.getAttribute("name").split(",")
@@ -54,8 +54,27 @@ class Game(ItemBase):
 			name = lib.Adjective(*names)
 			
 			item.noun.adjective = name
+
+		if item.xmlnode.hasAttribute("id"):
+			item.id = item.xmlnode.getAttribute("id")
 			
 		self.lib.add(item.noun)
+		
+		if self.find(item.id):
+			newId = item.id + "_"
+			i = 1
+			while self.find(newId + str(i)):
+				i += 1
+				
+			item.id = newId + str(i)
+			
+		self.inventory.append(item)
+		
+	def winGame(self):
+		self.dispatchEvent(game_events.GAME_WON())
+
+	def loseGame(self):
+		self.dispatchEvent(game_events.GAME_LOST())
 
 	def removeItem(self, item):
 		self.inventory.remove(item)
@@ -101,7 +120,7 @@ class Game(ItemBase):
 
 	def find(self, name):
 		for item in self.inventory:
-			if item.name == name:
+			if item.id == name:
 				return item
 		
 	def buildFromXML(self, doc, main):

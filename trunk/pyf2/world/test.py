@@ -69,7 +69,7 @@ class test_Variable(unittest.TestCase):
 class test_Item(unittest.TestCase):
 	def setUp(self):
 		def f(event):
-			self.moveHandler.l.append(event.done)
+			self.moveHandler.l.append(1)
 			
 		self.moveHandler = Mock(side_effect=f)
 		self.moveHandler.l = []
@@ -86,13 +86,13 @@ class test_Item(unittest.TestCase):
 		self.item.move(self.destination)
 		self.assertRaises(MoveError, lambda: self.destination.move(self.item))
 		
-		self.assertEqual(self.moveHandler.l, [False, False, True, True])
+		self.assertEqual(self.moveHandler.l, [1, 1])
 		self.assertEqual(self.item.owner, self.destination)
 		self.assertEqual(self.destination.inventory, [self.item])
 		
 		self.item.move(None)
 
-		self.assertEqual(self.moveHandler.l, [False, False, True, True, False, True])
+		self.assertEqual(self.moveHandler.l, [1, 1, 1])
 		self.assertEqual(self.item.owner, None)
 		self.assertEqual(self.destination.inventory, [])
 

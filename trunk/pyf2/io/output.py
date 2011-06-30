@@ -20,7 +20,7 @@ class Output(object):
 		
 	@property
 	def text(self):
-		return "\n".join([x[0] for x in sorted(self.output, key=lambda x:x[1])])
+		return "\n".join([x[0] for x in sorted(self.output, key=lambda x:x[1], reverse=True)])
 		
 	def evaluate(self, s):
 		if self.context:

@@ -10,10 +10,27 @@ class Item(ItemBase):
 		self.props = PropList()
 		self.inventory = []
 		self.noun = None
+		self._id = None
 		
 	def __iter__(self):
 		for x in self.noun:
 			yield x
+			
+	def assignParent(self, parent):
+		ItemBase.assignParent(self, parent)
+		if self.xmlnode.hasAttribute('id'):
+			self.id = self.xmlnode.getAttribute('id')
+			
+	@property
+	def id(self):
+		if not self._id:
+			return self.name
+		else:
+			return self._id
+			
+	@id.setter
+	def id(self, value):
+		self._id = value
 			
 	@property
 	def definite(self):
@@ -51,11 +68,11 @@ class Item(ItemBase):
 			raise MoveError("Can't move to own child")
 		
 		self.dispatchEvent(
-			game_events.MOVE(destination=destination, done=False))
+			game_events.MOVE(destination=destination))
 			
 		if destination:
 			destination.dispatchEvent(
-				game_events.ACQUIRE(destination=self, done=False))
+				game_events.ACQUIRE(destination=self))
 
 		if self.owner:
 			self.owner.inventory.remove(self)
@@ -65,20 +82,11 @@ class Item(ItemBase):
 		if self.owner:
 			self.owner.inventory.append(self)
 
-		self.dispatchEvent(
-			game_events.MOVE(destination=destination, done=True))
-			
-		if destination:
-			destination.dispatchEvent(
-				game_events.ACQUIRE(destination=self, done=True))
-
 
 	def _handle(self, input, output):
 		self.handle(input, output)
 		for prop in self.props:
 			prop._handle(input, output)
-		
-		self.owner.dispatchEvent(game_events.CHILD_HANDLE(done=True))
 		
 		
 	def handle(self, input, output):
@@ -105,7 +113,14 @@ class Item(ItemBase):
 		return Scope(self)
 		
 	def has(self, other):
-		return other in self.getScope().getChildren()
+		for x in self.getScope().getChildren():
+			if isinstance(other, basestring):
+				if x.id == other:
+					return True
+			else:
+				if x == other:
+					return True
+		return False
 		
 
 class Actor(Item):
@@ -113,7 +128,7 @@ class Actor(Item):
 	msg_unknownNoun = Variable("msg_unknownNoun", "You see nothing like that here.")
 	msg_unknownVerb = Variable("msg_unknownVerb", "You don't know how to \"{{input.unknown[0].name}}\" things.")
 	
-	def handle(self, input, output):
+	def handleError(self, input, output):
 		if input == ("inventory",):
 			self.writeInventory(output)
 		
@@ -128,7 +143,7 @@ class Actor(Item):
 	def writeInventory(self, output):
 		output.write("You're carrying:", -2)
 		for item in self.inventory:
-			output.write(item.indefinite, -1)
+			output.write(item.indefinite, 1)
 			
 		output.close()
 		
