@@ -1,6 +1,6 @@
 import sys
 
-from pyf2 import debug, init
+from pyf2 import init
 from pyf2.world.items import Item
 
 class Message(Item):
@@ -48,28 +48,8 @@ game = init.buildGameFromXML(
 )
 
 if __name__ == "__main__":
-	# INTERFACE CODE
+	from pyf2 import debug
+	
 	i = debug.Debugger()
 	i.loadGame(game)
-
-	if '-p' in sys.argv or '--play' in sys.argv:
-		i.run()
-	else:
-		i.test(
-			'''
-			x yourself
-			n
-			s
-			read message
-			n
-			w
-			x hook
-			hang cloak on hook
-			x hook
-			e
-			s
-			read message
-			'''
-		)
-		assert i.hashLog() == "1dcf7903b2184e9cadd08624e51e035fbd028ade"
-		print 'Test successful'
+	i.run()

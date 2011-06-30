@@ -28,7 +28,7 @@ class Debugger(Basic):
 	def test(self, s):
 		for x in s.strip().split("\n"):
 			x = x.strip()
-			self.printOutput(self.input(x))
+			self.input(x)
 		
 	def promptInput(self):
 		a = raw_input(self.prompt)
