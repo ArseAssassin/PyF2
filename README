@@ -1,0 +1,3 @@
+PyF is a cross-platform interactive fiction development library for Python. It aims to make writing interactive fiction easy and efficient without a need to learn a specialized IF language.
+
+PyF uses XML to model the game world but allows the actual game logic to be written in pure Python. This separation of logic and actual game content aims to improve the workflow of writers and programmers alike.
