@@ -84,10 +84,13 @@ class Item(ItemBase):
 
 
 	def _handle(self, input, output):
+		output.setContextHandler(self)
+		
 		self.handle(input, output)
 		for prop in self.props:
 			prop._handle(input, output)
 		
+		output.resetContextHandler()
 		
 	def handle(self, input, output):
 		pass

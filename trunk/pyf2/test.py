@@ -218,11 +218,6 @@ class test_GameIntegration(unittest.TestCase):
 		self.assertNotEqual(self.complexGame.inventory[1].props.Describable, None)
 		self.assertEqual(self.complexGame.inventory[1].props.Describable.description, "As handsome as ever.")
 		
-		self.assertEqual(self.complexGame.title, "Test game")
-		self.assertEqual(self.complexGame.description, "Test description")
-		self.assertEqual(self.complexGame.version, "1.0")
-		self.assertEqual(self.complexGame.introduction, "undefined")
-		
 		self.assertTrue(self.complexGame.find('room').props.Traversable != None)
 		
 	def test_handling(self):
@@ -249,7 +244,6 @@ class test_GameIntegration(unittest.TestCase):
 		
 		self.assertEqual(self.cg.input("examine").text, "\n".join([self.player.owner.name, self.player.owner.name, "You can also see %s here." % self.cloak.noun.indefinite]))
 
-		
 		self.assertInput("put cloak on table", "You place %s on %s." % (self.cloak.definite, self.table.definite))
 		
 		

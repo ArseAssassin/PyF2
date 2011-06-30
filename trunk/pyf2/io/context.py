@@ -10,6 +10,9 @@ class Context(object):
 	def put(self, name, value):
 		self.d[name] = value
 		
+	def remove(self, name):
+		del self.d[name]
+		
 	def getContext(self):
 		d = self.d.copy()
 		d["START_CODE"] = START_CODE_TOKEN

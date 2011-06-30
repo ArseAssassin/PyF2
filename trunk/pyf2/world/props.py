@@ -244,10 +244,57 @@ class Throwable(Property):
 	msg_hits = Message("msg_hits", "{{input.noun.definite}} hits {{input.nouns[1].definite}} and drops on the ground.")
 	msg_notCarried = Message("msg_notCarried", "You're not carrying {{input.noun.definite}}.")
 	
-	def input(self, input, output):
+	def handle(self, input, output):
 		if input == ("throw", '*self', 'at', '*noun'):
 			if self.item.owner != input.actor:
 				output.write(self.msg_notCarried)
 			else:
 				input.item.move(input.items[1].owner)
 				output.write(self.msg_hits)
+
+
+class Unreachable(Property):
+	msg_unreachable = Message("msg_hits", "{{input.noun.definite}} is out of your reach.")
+	isReachable = GameMessage("isReachable", False)
+	
+	def handle(self, input, output):
+		if input == ("*touch", "*self"):
+			if not self.isReachable:
+				output.write(self.msg_unreachable)
+
+
+class Seat(Property):
+	msg_sat = Message("msg_sat", "You take a seat on {{input.noun.definite}}.")
+	msg_stood = Message("msg_satOn", "You stand up.")
+	msg_inlineStood = Message("msg_satOn", "(first standing up)")
+	msg_notFree = Message("msg_satOn", "That seat is already taken.")
+
+	sitter = GameMessage("sitter", None)
+	
+	def handle(self, input, output):
+		if input == ('sit', 'on', '*self'):
+			if self.sitter != None:
+				output.write(self.msg_notFree)
+			else:
+				self.assignSitter(input.actor)
+				output.write(self.msg_sat)
+				
+	def assignSitter(self, actor):
+		self.sitter = actor
+		actor.addEventListener(game_events.ACT, onAct)
+		self.sitter.addEventListener(game_events.MOVE, onSitterMove)
+		
+	def removeSitter(self):
+		self.sitter.removeEventListener(game_events.MOVE, onSitterMove)
+		self.sitter = None
+		
+	def onAct(self, event):
+		if event.input == ("stand", "up") or event.input == ("stand", ):
+			removeSitter()
+			event.output.write(self.msg_stood)
+	
+	def onSitterMove(self, event):
+		self.removeSitter()
+		event.output.write(self.msg_inlineStood, 1)
+		
+		

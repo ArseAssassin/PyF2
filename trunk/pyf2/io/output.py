@@ -6,6 +6,12 @@ class Output(object):
 		self.output = []
 		self.closed = False
 		
+	def setContextHandler(self, handler):
+		self.context.put("self", handler)
+		
+	def resetContextHandler(self):
+		self.context.remove("self")
+		
 	def write(self, s, priority=0):
 		self.output.append([self.evaluate(s), priority])
 		if priority == 0:

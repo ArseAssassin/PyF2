@@ -58,4 +58,6 @@ class XMLMeta(nodes.XMLINode):
 				parent.version = self.getChildString(child)
 			elif child.localName == "introduction":
 				parent.introduction = self.getChildString(child)
+			elif child.localName == "author":
+				parent.author = self.getChildString(child)
 
