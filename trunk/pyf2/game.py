@@ -123,3 +123,8 @@ class Game(ItemBase):
 		for item in self.inventory:
 			if item.id == name:
 				return item
+
+	def getContext(self):
+		return Context(
+			game = self
+		)
