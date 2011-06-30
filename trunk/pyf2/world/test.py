@@ -3,7 +3,7 @@ from xmlinit.test import *
 from mock import Mock
 
 from scope import Scope
-from base import Variable, Property
+from base import Message, Property
 from items import Item
 from events import game_events
 from errors import *
@@ -35,13 +35,13 @@ class test_scope(unittest.TestCase):
 			
 		
 
-class test_Variable(unittest.TestCase):
+class test_Message(unittest.TestCase):
 	def setUp(self):
 		class testItem(object):
-			var = Variable('test', True)
-			var2 = Variable("nope", True)
-			var3 = Variable("dope", "rope")
-			var4 = Variable("hope", "cope")
+			var = Message('test', True)
+			var2 = Message("nope", True)
+			var3 = Message("dope", "rope")
+			var4 = Message("hope", "cope")
 			
 			def getXMLAttribute(self, name):
 				if name == 'test':

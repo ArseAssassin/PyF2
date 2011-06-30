@@ -1,4 +1,4 @@
-from base import ItemBase, PropList, Variable
+from base import ItemBase, PropList, Message
 from events import game_events
 from scope import Scope
 from errors import *
@@ -124,9 +124,9 @@ class Item(ItemBase):
 		
 
 class Actor(Item):
-	msg_default = Variable("msg_default", "Come again?")
-	msg_unknownNoun = Variable("msg_unknownNoun", "You see nothing like that here.")
-	msg_unknownVerb = Variable("msg_unknownVerb", "You don't know how to \"{{input.unknown[0].name}}\" things.")
+	msg_default = Message("msg_default", "Come again?")
+	msg_unknownNoun = Message("msg_unknownNoun", "You see nothing like that here.")
+	msg_unknownVerb = Message("msg_unknownVerb", "You don't know how to \"{{input.unknown[0].name}}\" things.")
 	
 	def handleError(self, input, output):
 		if input == ("inventory",):

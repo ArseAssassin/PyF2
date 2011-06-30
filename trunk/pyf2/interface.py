@@ -57,6 +57,10 @@ class Basic(Interface):
 	def run(self):
 		output = Output()
 		self.game.writeIntro(output)
+		
+		output.write(self.game.title, 1)
+		output.write("A game by %s" % self.game.author, 1)
+		
 		self.printOutput(output)
 		try:
 			while not self.gameFinished:

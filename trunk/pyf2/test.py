@@ -150,6 +150,7 @@ class test_GameIntegration(unittest.TestCase):
 				<title>Test game</title>
 				<description>Test description</description>
 				<version>1.0</version>
+				<author>Test</author>
 			</meta>
 		
 			<i:Item name="room">
@@ -199,6 +200,12 @@ class test_GameIntegration(unittest.TestCase):
 	@property
 	def cg(self):
 		return self.complexGame
+		
+	def test_metaDefinitions(self):
+		self.assertEqual(self.cg.title, "Test game")
+		self.assertEqual(self.cg.description, "Test description")
+		self.assertEqual(self.cg.version, "1.0")
+		self.assertEqual(self.cg.author, "Test")
 			
 	def test_gameStructure(self):
 		self.assertEqual(self.player.owner, self.complexGame.find("room"))

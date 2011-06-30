@@ -66,7 +66,7 @@ class VarBase(object):
 		raise Exception("unimplemented")
 
 
-class Variable(VarBase):
+class Message(VarBase):
 	def __init__(self, id, initial=None):
 		VarBase.__init__(self)
 		self.initial = initial
@@ -80,7 +80,7 @@ class Variable(VarBase):
 			return self.initial
 
 
-class DataVariable(VarBase):
+class DataMessage(VarBase):
 	def __init__(self, default=None):
 		VarBase.__init__(self)
 		self.default = default
@@ -92,9 +92,9 @@ class DataVariable(VarBase):
 			return self.default
 			
 			
-class GameVariable(Variable):
+class GameMessage(Message):
 	def __get__(self, instance, type):
-		s = Variable.__get__(self, instance, type)
+		s = Message.__get__(self, instance, type)
 		if isinstance(s, basestring):
 			return instance.game.getContext().evaluate(s)
 	

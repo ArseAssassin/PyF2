@@ -12,6 +12,7 @@
 		<version></version>
 		<description>Simple demo game</description>
 		<introduction>Hurrying through the rainswept November night, you're glad to see the bright lights of the Opera House. It's surprising that there aren't more people about but, hey, what do you expect in a cheap demo game...?</introduction>
+		<author></author>
 	</meta>
 	
 	<i:Item name="Foyer of the Opera House,foyer">
@@ -82,7 +83,7 @@
 	
 	<i:Item name="Foyer Bar,bar">
 		<p:Room>{{not actor.has('cloak') and "The bar, much rougher than you'd have guessed after the opulence of the foyer to the north, is completely empty. There seems to be some sort of message scrawled in the sawdust on the floor." or "It's dark in here!"}}
-			<!-- You can embed Python code in all output. The code is evaluated according to lambda syntax. -->
+			<!-- You can embed Python code in all messages. The code is evaluated using the Python lambda syntax. -->
 		</p:Room>
 
 		<p:Traversable>

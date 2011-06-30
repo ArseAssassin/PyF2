@@ -1,11 +1,11 @@
-from base import Property, Variable, DataVariable, GameVariable
+from base import Property, Message, DataMessage, GameMessage
 from events import game_events
 from events.game_events import *
 
 class Surface(Property):
-	msg_hang = Variable("msg_hang", "You hang {{input.noun.definite}} on {{input.nouns[1].definite}}.")
-	msg_put = Variable("msg_put", "You place {{input.noun.definite}} on {{input.nouns[1].definite}}.")
-	hanger = GameVariable("hanger", False)
+	msg_hang = Message("msg_hang", "You hang {{input.noun.definite}} on {{input.nouns[1].definite}}.")
+	msg_put = Message("msg_put", "You place {{input.noun.definite}} on {{input.nouns[1].definite}}.")
+	hanger = GameMessage("hanger", False)
 	
 	def handle(self, input, output):
 		if self.hanger:
@@ -19,8 +19,8 @@ class Surface(Property):
 
 
 class Container(Property):
-	msg_put = Variable("msg_put", "You finish placing {{input.noun.definite}} in {{self.owner.definite}}.")
-	msg_alreadyPut = Variable("msg_alreadyPut", "{{input.noun.definite}} is already in {{self.owner.definite}}.")
+	msg_put = Message("msg_put", "You finish placing {{input.noun.definite}} in {{self.owner.definite}}.")
+	msg_alreadyPut = Message("msg_alreadyPut", "{{input.noun.definite}} is already in {{self.owner.definite}}.")
 	
 	def handle(self, input, output):
 		if input == ("put", "*noun", "in", "*self"):
@@ -29,8 +29,8 @@ class Container(Property):
 			
 			
 class Dark(Property):
-	msg_dark = Variable("msg_dark", "It's too dark to do that here.")
-	lit = GameVariable("lit", False)
+	msg_dark = Message("msg_dark", "It's too dark to do that here.")
+	lit = GameMessage("lit", False)
 	
 	def assignParent(self, parent):
 		Property.assignParent(self, parent)
@@ -47,13 +47,13 @@ class Dark(Property):
 class Closable(Property):
 	TRY_OPEN = GameEvent("try_open")
 	
-	msg_closed = Variable("msg_closed", "You finish closing {{self.owner.definite}}.")
-	msg_alreadyClosed = Variable("msg_alreadyClosed", "{{self.owner.definite}} is already closed.")
+	msg_closed = Message("msg_closed", "You finish closing {{self.owner.definite}}.")
+	msg_alreadyClosed = Message("msg_alreadyClosed", "{{self.owner.definite}} is already closed.")
 
-	msg_open = Variable("msg_open", "You finish opening {{self.owner.definite}}.")
-	msg_alreadyOpen = Variable("msg_alreadyOpen", "{{self.owner.definite}} is already open.")
+	msg_open = Message("msg_open", "You finish opening {{self.owner.definite}}.")
+	msg_alreadyOpen = Message("msg_alreadyOpen", "{{self.owner.definite}} is already open.")
 
-	isClosed = Variable("isClosed", False)
+	isClosed = Message("isClosed", False)
 	
 	def assignParent(self, parent):
 		Property.assignParent(self, parent)
@@ -82,10 +82,10 @@ class Closable(Property):
 
 class Lockable(Property):
 	
-	key = Variable("key", None)
-	msg_locked = Variable("msg_locked", "{{self.owner.definite}} is locked.")
-	msg_unlocked = Variable("msg_unlocked", "You finish unlocking {{self.owner.definite}}.")
-	isLocked = Variable("isLocked", False)
+	key = Message("key", None)
+	msg_locked = Message("msg_locked", "{{self.owner.definite}} is locked.")
+	msg_unlocked = Message("msg_unlocked", "You finish unlocking {{self.owner.definite}}.")
+	isLocked = Message("isLocked", False)
 	
 	def assignParent(self, parent):
 		Property.assignParent(self, parent)
@@ -102,7 +102,7 @@ class Lockable(Property):
 			
 
 class Describable(Property):
-	description = DataVariable("No description.")
+	description = DataMessage("No description.")
 	
 	def handle(self, input, output):
 		if input == ("examine", "*self"):
@@ -113,16 +113,16 @@ Desc = Describable # shortcut for Describable
 
 
 class Wearable(Property):
-	msg_wear = Variable("msg_wear", "You finish putting on {{input.noun.definite}}.")
-	msg_first = Variable("msg_first", "(first taking {{input.noun.definite}} off)")
-	msg_alreadyWorn = Variable("msg_worn", "You're already wearing {{input.noun.definite}}.")
+	msg_wear = Message("msg_wear", "You finish putting on {{input.noun.definite}}.")
+	msg_first = Message("msg_first", "(first taking {{input.noun.definite}} off)")
+	msg_alreadyWorn = Message("msg_worn", "You're already wearing {{input.noun.definite}}.")
 
-	msg_strip = Variable("msg_strip", "You finish taking off {{input.noun.definite}}.")
-	msg_alreadyStripped= Variable("msg_stripped", "You're not wearing {{input.noun.definite}}.")
+	msg_strip = Message("msg_strip", "You finish taking off {{input.noun.definite}}.")
+	msg_alreadyStripped= Message("msg_stripped", "You're not wearing {{input.noun.definite}}.")
 
-	msg_notCarrying = Variable("msg_notCarrying", "You're not carrying {{input.noun.definite}}.")
+	msg_notCarrying = Message("msg_notCarrying", "You're not carrying {{input.noun.definite}}.")
 	
-	worn = GameVariable("worn", False)
+	worn = GameMessage("worn", False)
 
 	def assignParent(self, parent):
 		Property.assignParent(self, parent)
@@ -156,8 +156,8 @@ class Wearable(Property):
 				
 				
 class Hot(Property):
-	msg_tooHot = Variable("msg_tooHot", "{{input.noun.definite}} is too hot to touch.")
-	isHot = Variable("isHot", False)
+	msg_tooHot = Message("msg_tooHot", "{{input.noun.definite}} is too hot to touch.")
+	isHot = Message("isHot", False)
 	
 	def handle(self, input, output):
 		if input == ("*touch", "*self") and self.isHot:
@@ -168,11 +168,11 @@ TAKE = GameEvent("take")
 DROP = GameEvent("drop")
 
 class Portable(Property):
-	msg_dropped = Variable("msg_dropped", "You drop {{input.noun.definite}} on the ground.")
-	isDroppable = Variable("isDroppable", True)
+	msg_dropped = Message("msg_dropped", "You drop {{input.noun.definite}} on the ground.")
+	isDroppable = Message("isDroppable", True)
 	
-	msg_taken = Variable("msg_taken", "You pick up {{input.noun.definite}}.")
-	isPortable = Variable("isPortable", True)
+	msg_taken = Message("msg_taken", "You pick up {{input.noun.definite}}.")
+	isPortable = Message("isPortable", True)
 	
 	moved = True
 	
@@ -194,8 +194,8 @@ class Portable(Property):
 			
 			
 class Handler(Property):
-	input = Variable("input")
-	output = DataVariable()
+	input = Message("input")
+	output = DataMessage()
 	
 	def handle(self, input, output):
 		if input == self.input:
@@ -203,7 +203,7 @@ class Handler(Property):
 			
 			
 class Traversable(Property):
-	msg_noExit = Variable("msg_noExt", "There is no exit leading that way.")
+	msg_noExit = Message("msg_noExt", "There is no exit leading that way.")
 	
 	def __init__(self, *args, **kwargs):
 		Property.__init__(self, *args, **kwargs)
@@ -223,7 +223,7 @@ class Traversable(Property):
 		
 		
 class Room(Property):
-	description = DataVariable("No description.")
+	description = DataMessage("No description.")
 
 	def handle(self, input, output):
 		if input == ("examine",) or input == "":
@@ -240,4 +240,14 @@ class Room(Property):
 		output.close()
 			
 			
-		
+class Throwable(Property):
+	msg_hits = Message("msg_hits", "{{input.noun.definite}} hits {{input.nouns[1].definite}} and drops on the ground.")
+	msg_notCarried = Message("msg_notCarried", "You're not carrying {{input.noun.definite}}.")
+	
+	def input(self, input, output):
+		if input == ("throw", '*self', 'at', '*noun'):
+			if self.item.owner != input.actor:
+				output.write(self.msg_notCarried)
+			else:
+				input.item.move(input.items[1].owner)
+				output.write(self.msg_hits)
