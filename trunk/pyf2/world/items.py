@@ -144,9 +144,9 @@ class Actor(Item):
 		output.write(self.msg_default)
 		
 	def writeInventory(self, output):
-		output.write("You're carrying:", -2)
+		output.write("You're carrying:", 1)
 		for item in self.inventory:
-			output.write(item.indefinite, 1)
+			output.write(item.indefinite, -2)
 			
 		output.close()
 		
