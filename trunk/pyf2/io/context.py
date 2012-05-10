@@ -7,6 +7,9 @@ class Context(object):
 	def __init__(self, **kwargs):
 		self.d = kwargs
 		
+	def clone(self):
+		return Context(**self.d.copy())
+		
 	def put(self, name, value):
 		self.d[name] = value
 		

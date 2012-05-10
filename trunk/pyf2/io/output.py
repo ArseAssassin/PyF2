@@ -2,7 +2,7 @@ from context import Context
 
 class Output(object):
 	def __init__(self, context=None):
-		self.context = context
+		self.context = context or Context()
 		self.output = []
 		self.closed = False
 		
@@ -29,10 +29,7 @@ class Output(object):
 		return "\n".join([x[0] for x in sorted(self.output, key=lambda x:x[1], reverse=True)])
 		
 	def evaluate(self, s):
-		if self.context:
-			return self.context.evaluate(s)
-		else:
-			return s
+		return self.context.evaluate(s)
 			
 	def clean(self):
 		self.closed = False

@@ -29,12 +29,18 @@ class Container(Property):
 			
 			
 class Dark(Property):
-	msg_dark = Message("msg_dark", "It's too dark to do that here.")
+	msg_dark = Message("msg_dark", "You can't do that in the dark.")
+	msg_dark_description = Message("msg_dark_description", "It's dark in here.")
 	lit = GameMessage("lit", False)
 	
 	def assignParent(self, parent):
 		Property.assignParent(self, parent)
 		self.owner.addEventListener(CHILD_HANDLE, self.onChildHandle)
+		self.owner.addEventListener(DESCRIBE, self.onDescribe)
+		
+	def onDescribe(self, event):
+		if not self.lit:
+			self.requestHandling(lambda input, output: output.write(self.msg_dark_description))
 		
 	def onChildHandle(self, event):
 		if not self.lit:
@@ -231,6 +237,7 @@ class Room(Property):
 			
 	def writeDescription(self, output):
 		output.write(self.item.name, 1)
+		self.owner.dispatchEvent(game_events.DESCRIBE())
 		output.write(self.description, 1)
 		
 		moved = filter(lambda x: x.props.Portable and x.props.Portable.moved, self.item.inventory)

@@ -44,7 +44,9 @@ class Controlled(State):
 		output = Output(context)
 		scope = self.actor.getScope()
 		
+		handler = lambda x: x.handler(input, output)
 		
+		self.actor.game.addEventListener(game_events.REQUEST_HANDLING, handler)
 		try:
 			self.handleWith(self.actor.getScope().getTopmost(), input, output)
 			
@@ -59,6 +61,8 @@ class Controlled(State):
 			
 		except OutputClosed, e:
 			pass
+			
+			self.actor.game.removeEventListener(game_events.REQUEST_HANDLING, handler)
 			
 		return output
 		

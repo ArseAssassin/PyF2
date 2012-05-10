@@ -95,6 +95,11 @@ class DataMessage(VarBase):
 class GameMessage(Message):
 	def __get__(self, instance, type):
 		s = Message.__get__(self, instance, type)
+		
 		if isinstance(s, basestring):
-			return instance.game.getContext().evaluate(s)
+			context = instance.game.getContext().clone()
+			context.d['self'] = instance
+			return context.evaluate(s)
+		else:
+			return s
 	

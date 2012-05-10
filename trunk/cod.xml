@@ -58,7 +58,7 @@
 				As handsome as ever.
 			</p:Describable>
 
-			<i:Item name="cloak,cape">
+			<i:Item name="cloak,cape,the cloak of darkness">
 				<p:Desc>A handsome cloak, of velvet trimmed with satin, and slightly spattered with raindrops. Its blackness is so deep that it almost seems to suck light from the room.</p:Desc>
 
 				<p:Wearable worn="{{True}}" />
@@ -82,9 +82,11 @@
 	</i:Item>
 	
 	<i:Item name="Foyer Bar,bar">
-		<p:Room>{{not actor.has('cloak') and "The bar, much rougher than you'd have guessed after the opulence of the foyer to the north, is completely empty. There seems to be some sort of message scrawled in the sawdust on the floor." or "It's dark in here!"}}
+		<p:Room>{{"The bar, much rougher than you'd have guessed after the opulence of the foyer to the north, is completely empty. There seems to be some sort of message scrawled in the sawdust on the floor." or "It's dark in here!"}}
 			<!-- You can embed Python code in all messages. The code is evaluated using the Python lambda syntax. -->
 		</p:Room>
+		
+		<p:Dark lit="{{not self.owner.has('cloak')}}" />
 
 		<p:Traversable>
 			<north>Foyer of the Opera House</north>

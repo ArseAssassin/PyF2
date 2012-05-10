@@ -17,6 +17,8 @@ class HandlerEvent(events.Event):
 		events.Event.__init__(self, type)
 		self.handler = handler
 		
+		
+DESCRIBE = GameEvent("describe")
 
 CHILD_ACT = GameEvent("child_act")
 CHILD_HANDLE = GameEvent("child_handle")
