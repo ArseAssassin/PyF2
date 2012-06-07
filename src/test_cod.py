@@ -20,5 +20,5 @@ i.test(
 	read message
 	'''
 )
-assert i.hashLog() == "1dcf7903b2184e9cadd08624e51e035fbd028ade"
+assert i.hashLog() == "d3e02cda75dc3c1f59e66b5d88bcb3044ad8d827"
 print 'Test successful'
