@@ -86,7 +86,7 @@
 			<!-- You can embed Python code in all messages. The code is evaluated using the Python lambda syntax. -->
 		</p:Room>
 		
-		<p:Dark lit="{{not self.owner.has('cloak')}}" />
+		<Dark lit="{{not self.owner.has('cloak')}}" />
 
 		<p:Traversable>
 			<north>Foyer of the Opera House</north>

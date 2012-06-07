@@ -103,3 +103,17 @@ class GameMessage(Message):
 		else:
 			return s
 	
+	
+if __name__ == "__main__":
+	import unittest
+	
+	class TestPropList(unittest.TestCase):
+		def test_fetching(self):
+			p = PropList()
+			property = Property()
+			p.append(property)
+			self.assertEquals(p.Property, property)
+	
+	unittest.main()
+	
+	
