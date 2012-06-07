@@ -1,0 +1,102 @@
+<g:Game xmlns:g="pyf2.game" xmlns:p="pyf2.world.props" xmlns:i="pyf2.world.items">
+	<!-- PyF2 modules are imported to XML namespaces. In Python code this would equivalent to
+		import pyf2.game as g
+		import pyf2.world.props as p
+		import pyf2.world.items as i
+	 -->
+	
+	<meta>
+		<!-- game meta information -->
+		
+		<title>The Cloak of Darkness</title>
+		<version></version>
+		<description>Simple demo game</description>
+		<introduction>Hurrying through the rainswept November night, you're glad to see the bright lights of the Opera House. It's surprising that there aren't more people about but, hey, what do you expect in a cheap demo game...?</introduction>
+		<author></author>
+	</meta>
+	
+	<i:Item name="Foyer of the Opera House,foyer">
+		<!-- 
+			You can refer to classes in XML namespaces. Here we're instantiating
+			pyf2.world.items.Item
+			
+			The name attribute is assigned to the object. Multiple synonyms are separated with commas
+			and the first one is always used as the object's name.
+		-->
+		
+		<p:Room>
+			<!-- 
+				We assign the Room property to the instance. This defines the item as something that can be 
+				examined by simply typing "look". 
+			-->
+			You are standing in a spacious hall, splendidly decorated in red and gold, with glittering chandeliers overhead. The entrance from the street is to the north, and there are doorways south and west.
+		</p:Room>
+
+		<p:Handler input="north">
+			<!-- Print this message when player tries to go north. -->
+			You've only just arrived, and besides, the weather outside seems to be getting worse.
+		</p:Handler>
+			
+		<p:Handler input="drop cloak">This isn't the best place to leave a smart cloak lying around.</p:Handler>
+
+		<p:Traversable>
+			<!-- 
+				Here we're assigning links to different rooms in the game.
+			 -->
+			<west>Cloakroom</west>
+			<south>Foyer Bar</south>
+		</p:Traversable>
+		
+		<i:Actor name="yourself" id="initial_actor">
+			<!-- 
+				This is moved to the parent object, in this game the foyer, as soon as the game is initiated. 
+				Id is used to refer to the object in the game's internal search function and here it also defines
+				it as the initial actor when the game starts.
+			-->
+			<p:Describable>
+				<!-- You can examine this object with "examine yourself". -->
+				As handsome as ever.
+			</p:Describable>
+
+			<i:Item name="cloak,cape,the cloak of darkness">
+				<p:Desc>A handsome cloak, of velvet trimmed with satin, and slightly spattered with raindrops. Its blackness is so deep that it almost seems to suck light from the room.</p:Desc>
+
+				<p:Wearable worn="{{True}}" />
+				<p:Portable droppable="{{True}}" />
+				<!-- Text in double curly braces is executed as Python code. -->
+			</i:Item>
+		</i:Actor>
+	</i:Item>
+	
+	<i:Item name="Cloakroom">
+		<p:Room>The walls of this small room were clearly once lined with hooks, though now only one remains. The exit is a door to the east.</p:Room>
+
+		<p:Traversable>
+			<east>Foyer of the Opera House</east>
+		</p:Traversable>
+
+		<i:Item name="hook,peg" adjective="small,brass">
+			<p:Desc>It's just a small brass hook{{ input.item.has('cloak') and ' with a cloak hanging on it' or '' }}.</p:Desc>
+			<p:Surface hanger="{{True}}" />
+		</i:Item>
+	</i:Item>
+	
+	<i:Item name="Foyer Bar,bar">
+		<p:Room>{{"The bar, much rougher than you'd have guessed after the opulence of the foyer to the north, is completely empty. There seems to be some sort of message scrawled in the sawdust on the floor." or "It's dark in here!"}}
+			<!-- You can embed Python code in all messages. The code is evaluated using the Python lambda syntax. -->
+		</p:Room>
+		
+		<p:Dark lit="{{not self.owner.has('cloak')}}" />
+
+		<p:Traversable>
+			<north>Foyer of the Opera House</north>
+		</p:Traversable>
+		
+		<Message name="message,sawdust,floor,dust" adjective="scrawled" />
+		<!-- 
+			Defining an adjective here allows the player to refer to the message as "scrawled message".
+		 -->
+		
+	</i:Item>
+
+</g:Game>
